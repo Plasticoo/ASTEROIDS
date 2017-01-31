@@ -2,8 +2,10 @@
 #include <SFML/Graphics.hpp>
 
 #include <iostream>
+#include <cmath>
 
 #define FRAMERATE 60
+#define PI 3.14159265f
 
 int main() {
     sf::RenderWindow window;
@@ -19,6 +21,7 @@ int main() {
     window.setVerticalSyncEnabled(true);
     window.setFramerateLimit(FRAMERATE);
 
+    // set spaceship
     spaceship.setPointCount(3);
     spaceship.setPoint(0, sf::Vector2f(20, 40));
     spaceship.setPoint(1, sf::Vector2f(70, 60));
@@ -36,16 +39,24 @@ int main() {
                 std::cout << "[INFO] - Closing window!" << std::endl;
                 window.close();
             }
-            else if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Q) {
-                    std::cout << "[INFO] - Closing window!" << std::endl;
-                    window.close();
-                }
+        }
 
-                if (event.key.code == sf::Keyboard::Right) {
-                    spaceship.setRotation(spaceship.getRotation() + 10.0f);
-                }
-            }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+            std::cout << "[INFO] - Closing window!" << std::endl;
+            window.close();
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            spaceship.setRotation(spaceship.getRotation() - 1.0f);
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            spaceship.setRotation(spaceship.getRotation() + 1.0f);
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            spaceship.move(std::cos(PI * spaceship.getRotation() / 180.f),
+                           std::sin(PI * spaceship.getRotation() / 180.f));
         }
 
         window.clear(sf::Color::Black);
