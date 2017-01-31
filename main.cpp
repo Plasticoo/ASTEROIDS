@@ -7,18 +7,14 @@
 
 int main() {
     sf::RenderWindow window;
-    sf::ConvexShape spaceship;
+    sf::CircleShape spaceship(15, 3);
 
     // set window
     window.create(sf::VideoMode(800, 600), "Asteroids", sf::Style::Close);
     window.setVerticalSyncEnabled(true);
     window.setFramerateLimit(FRAMERATE);
 
-    spaceship.setPointCount(4);
-    spaceship.setPoint(0, sf::Vector2f(0, 0));
-    spaceship.setPoint(1, sf::Vector2f(150, 10));
-    spaceship.setPoint(2, sf::Vector2f(120, 90));
-    spaceship.setPoint(3, sf::Vector2f(30, 100));
+    spaceship.setFillColor(sf::Color::Cyan);
 
     while (window.isOpen()) {
 
@@ -27,6 +23,12 @@ int main() {
             if (event.type == sf::Event::Closed) {
                 std::cout << "[INFO] - Closing window!" << std::endl;
                 window.close();
+            }
+            else if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Q) {
+                    std::cout << "[INFO] - Closing window!" << std::endl;
+                    window.close();
+                }
             }
         }
 
