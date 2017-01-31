@@ -8,8 +8,9 @@
 #define PI 3.14159265f
 
 int main() {
-    sf::RenderWindow window;
+    bool focus = true;
 
+    sf::RenderWindow window;
     sf::ConvexShape spaceship;
 
     // settings
@@ -39,26 +40,35 @@ int main() {
                 std::cout << "[INFO] - Closing window!" << std::endl;
                 window.close();
             }
+
+            if (event.type == sf::Event::GainedFocus && !focus) {
+                focus = true;
+            }
+
+            if (event.type == sf::Event::LostFocus && focus) {
+                focus = false;
+            }
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
-            std::cout << "[INFO] - Closing window!" << std::endl;
-            window.close();
-        }
+        if (focus) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+                std::cout << "[INFO] - Closing window!" << std::endl;
+                window.close();
+            }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            spaceship.setRotation(spaceship.getRotation() - 1.0f);
-        }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+                spaceship.setRotation(spaceship.getRotation() - 1.0f);
+            }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            spaceship.setRotation(spaceship.getRotation() + 1.0f);
-        }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+                spaceship.setRotation(spaceship.getRotation() + 1.0f);
+            }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            spaceship.move(std::cos(PI * spaceship.getRotation() / 180.f),
-                           std::sin(PI * spaceship.getRotation() / 180.f));
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+                spaceship.move(std::cos(PI * spaceship.getRotation() / 180.f),
+                               std::sin(PI * spaceship.getRotation() / 180.f));
+            }
         }
-
         window.clear(sf::Color::Black);
 
         // draw here
