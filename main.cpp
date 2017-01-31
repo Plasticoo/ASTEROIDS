@@ -9,14 +9,23 @@ int main() {
     sf::RenderWindow window;
 
     // TODO: cant be a circleshape, and shouldnt
-    sf::CircleShape spaceship(15, 3);
+    sf::ConvexShape spaceship;
+
+    // settings
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 8;
 
     // set window
-    window.create(sf::VideoMode(800, 600), "Asteroids", sf::Style::Close);
+    window.create(sf::VideoMode(800, 600), "Asteroids", sf::Style::Close, settings);
     window.setVerticalSyncEnabled(true);
     window.setFramerateLimit(FRAMERATE);
 
-    spaceship.setOrigin(spaceship.getRadius() / 4, spaceship.getRadius() / 4);
+    spaceship.setPointCount(3);
+    spaceship.setPoint(0, sf::Vector2f(10,  10));
+    spaceship.setPoint(1, sf::Vector2f(100, 10));
+    spaceship.setPoint(2, sf::Vector2f(100, 100));
+
+    spaceship.setOrigin((10 + 100 + 100) / 3, (10 + 10 + 100) / 3);
     spaceship.setFillColor(sf::Color::Cyan);
     spaceship.setPosition(800/2, 600/2);
 
