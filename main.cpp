@@ -8,7 +8,6 @@
 int main() {
     sf::RenderWindow window;
 
-    // TODO: cant be a circleshape, and shouldnt
     sf::ConvexShape spaceship;
 
     // settings
@@ -21,11 +20,11 @@ int main() {
     window.setFramerateLimit(FRAMERATE);
 
     spaceship.setPointCount(3);
-    spaceship.setPoint(0, sf::Vector2f(10,  10));
-    spaceship.setPoint(1, sf::Vector2f(100, 10));
-    spaceship.setPoint(2, sf::Vector2f(100, 100));
+    spaceship.setPoint(0, sf::Vector2f(20, 40));
+    spaceship.setPoint(1, sf::Vector2f(70, 60));
+    spaceship.setPoint(2, sf::Vector2f(20, 80));
 
-    spaceship.setOrigin((10 + 100 + 100) / 3, (10 + 10 + 100) / 3);
+    spaceship.setOrigin((20 + 70 + 20) / 3, (40 + 60 + 80) / 3);
     spaceship.setFillColor(sf::Color::Cyan);
     spaceship.setPosition(800/2, 600/2);
 
