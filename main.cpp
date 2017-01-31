@@ -7,6 +7,8 @@
 
 int main() {
     sf::RenderWindow window;
+
+    // TODO: cant be a circleshape, and shouldnt
     sf::CircleShape spaceship(15, 3);
 
     // set window
@@ -14,7 +16,9 @@ int main() {
     window.setVerticalSyncEnabled(true);
     window.setFramerateLimit(FRAMERATE);
 
+    spaceship.setOrigin(spaceship.getRadius() / 4, spaceship.getRadius() / 4);
     spaceship.setFillColor(sf::Color::Cyan);
+    spaceship.setPosition(800/2, 600/2);
 
     while (window.isOpen()) {
 
@@ -28,6 +32,10 @@ int main() {
                 if (event.key.code == sf::Keyboard::Q) {
                     std::cout << "[INFO] - Closing window!" << std::endl;
                     window.close();
+                }
+
+                if (event.key.code == sf::Keyboard::Right) {
+                    spaceship.setRotation(spaceship.getRotation() + 10.0f);
                 }
             }
         }
