@@ -7,11 +7,27 @@
 #define FRAMERATE 60
 #define PI 3.14159265f
 
+struct Bullet {
+    sf::RectangleShape object;
+    sf::Vector2f original_pos;
+
+    Bullet(sf::Vector2f position, float rotation) {
+        this->object = sf::RectangleShape(sf::Vector2f(10, 10));
+        this->object.setPosition(position);
+        this->object.setRotation(rotation);
+
+        this->original_pos = position;
+    }
+};
+
 int main() {
     bool focus = true;
 
     sf::RenderWindow window;
     sf::ConvexShape spaceship;
+
+    // bullets
+    std::vector<Bullet> bullets;
 
     // settings
     sf::ContextSettings settings;
@@ -37,7 +53,7 @@ int main() {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                std::cout << "[INFO] - Closing window!" << std::endl;
+                printf("[INFO] - Closing window!\n");
                 window.close();
             }
 
@@ -52,8 +68,16 @@ int main() {
 
         if (focus) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
-                std::cout << "[INFO] - Closing window!" << std::endl;
+                printf("[INFO] - Closing window!\n");
                 window.close();
+            }
+
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+                bullets.push_back(Bullet(spaceship.getTransform().transformPoint(spaceship.getPoint(1)),
+                                         spaceship.getRotation()));
+                printf("[INFO] - Bullet point 1: {%f, %f}\n",
+                       spaceship.getTransform().transformPoint(spaceship.getPoint(1)).x,
+                       spaceship.getTransform().transformPoint(spaceship.getPoint(1)).y);
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
@@ -69,10 +93,29 @@ int main() {
                                std::sin(PI * spaceship.getRotation() / 180.f));
             }
         }
+
         window.clear(sf::Color::Black);
 
         // draw here
         window.draw(spaceship);
+
+        for(int i = 0; i < bullets.size(); i++) {
+            printf("[INFO] - {Nr: %d , X: %f, Y: %f}\n",
+                   bullets.size(),
+                   bullets[i].original_pos.x,
+                   bullets[i].original_pos.y);
+
+            if(bullets[i].object.getPosition().x > window.getSize().x ||
+               bullets[i].object.getPosition().x < 0 ||
+               bullets[i].object.getPosition().y > window.getSize().y ||
+               bullets[i].object.getPosition().y < 0) {
+                bullets.erase(bullets.begin() + i);
+            }
+
+            bullets[i].object.move(std::cos(PI * bullets[i].object.getRotation() / 180.f),
+                                   std::sin(PI * bullets[i].object.getRotation() / 180.f));
+            window.draw(bullets[i].object);
+        }
 
         window.display();
     }
