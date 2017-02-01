@@ -24,6 +24,7 @@ struct Bullet {
 
 int main() {
     bool focus = true;
+    bool can_shoot = true;
 
     // font and text
     sf::Font font;
@@ -88,6 +89,12 @@ int main() {
             if (event.type == sf::Event::LostFocus && focus) {
                 focus = false;
             }
+
+            if (event.type == sf::Event::KeyReleased) {
+                if (event.key.code == sf::Keyboard::Space) {
+                    can_shoot = true;
+                }
+            }
         }
 
         if (focus) {
@@ -97,8 +104,11 @@ int main() {
             }
 
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-                bullets.push_back(Bullet(spaceship.getTransform().transformPoint(spaceship.getPoint(1)),
-                                         spaceship.getRotation()));
+                if (can_shoot) {
+                    bullets.push_back(Bullet(spaceship.getTransform().transformPoint(spaceship.getPoint(1)),
+                                             spaceship.getRotation()));
+                    can_shoot = false;
+                }
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
