@@ -25,11 +25,16 @@ int main() {
     sf::Text text_points;
     sf::Text text_npoints;
 
+    // timers
+    sf::Clock asteroid_clock;
+    int asteroid_time;
+
     sf::RenderWindow window;
     sf::ConvexShape spaceship;
 
     // bullets
     std::vector<sf::RectangleShape> bullets;
+    std::vector<Asteroid> asteroids;
 
     // settings
     sf::ContextSettings settings;
@@ -124,7 +129,15 @@ int main() {
             }
         }
 
+        // set text
         text_npoints.setString(std::to_string(bullets.size()));
+
+        // asteroid timings
+        asteroid_time = asteroid_clock.getElapsedTime().asSeconds();
+        if (asteroid_time > 2) {
+            printf("[INFO] - Restarting clock!\n");
+            asteroid_clock.restart();
+        }
 
         window.clear(sf::Color::Black);
 
