@@ -76,6 +76,7 @@ int main() {
     while (window.isOpen()) {
 
         sf::Event event;
+
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 printf("[INFO] - Closing window!\n");
@@ -120,6 +121,7 @@ int main() {
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+                // TODO: take care of window borders
                 spaceship.move(std::cos(PI * spaceship.getRotation() / 180.f),
                                std::sin(PI * spaceship.getRotation() / 180.f));
             }
