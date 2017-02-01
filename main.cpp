@@ -23,6 +23,10 @@ struct Bullet {
 int main() {
     bool focus = true;
 
+    sf::Font font;
+    sf::Text text_points;
+    sf::Text text_npoints;
+
     sf::RenderWindow window;
     sf::ConvexShape spaceship;
 
@@ -47,6 +51,23 @@ int main() {
     spaceship.setOrigin((20 + 70 + 20) / 3, (40 + 60 + 80) / 3);
     spaceship.setFillColor(sf::Color::Cyan);
     spaceship.setPosition(800/2, 600/2);
+
+    if (!font.loadFromFile("resources/arial.ttf")) {
+        printf("[ERRR] - Font could not be loaded.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    text_points.setFont(font);
+    text_points.setString("Points:");
+    text_points.setCharacterSize(24);
+    text_points.setStyle(sf::Text::Regular);
+
+    text_npoints.setFont(font);
+    text_npoints.setString("0");
+    text_npoints.setCharacterSize(24);
+    text_npoints.setStyle(sf::Text::Regular);
+    text_npoints.setPosition(text_points.getPosition().x + 80,
+                             text_points.getPosition().y);
 
     while (window.isOpen()) {
 
@@ -75,9 +96,6 @@ int main() {
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
                 bullets.push_back(Bullet(spaceship.getTransform().transformPoint(spaceship.getPoint(1)),
                                          spaceship.getRotation()));
-                printf("[INFO] - Bullet point 1: {%f, %f}\n",
-                       spaceship.getTransform().transformPoint(spaceship.getPoint(1)).x,
-                       spaceship.getTransform().transformPoint(spaceship.getPoint(1)).y);
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
@@ -97,14 +115,11 @@ int main() {
         window.clear(sf::Color::Black);
 
         // draw here
+        window.draw(text_points);
+        window.draw(text_npoints);
         window.draw(spaceship);
 
         for(int i = 0; i < bullets.size(); i++) {
-            printf("[INFO] - {Nr: %d , X: %f, Y: %f}\n",
-                   bullets.size(),
-                   bullets[i].original_pos.x,
-                   bullets[i].original_pos.y);
-
             if(bullets[i].object.getPosition().x > window.getSize().x ||
                bullets[i].object.getPosition().x < 0 ||
                bullets[i].object.getPosition().y > window.getSize().y ||
