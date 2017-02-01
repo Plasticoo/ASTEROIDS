@@ -9,20 +9,6 @@
 #define BULLET_SPEED 2.0f
 #define PI 3.14159265f
 
-// TODO: do i really need it?
-struct Bullet {
-    sf::RectangleShape object;
-    sf::Vector2f original_pos;
-
-    Bullet(sf::Vector2f position, float rotation) {
-        this->object = sf::RectangleShape(sf::Vector2f(10, 10));
-        this->object.setPosition(position);
-        this->object.setRotation(rotation);
-
-        this->original_pos = position;
-    }
-};
-
 struct Asteroid {
     sf::Vector2f position;
 
@@ -43,7 +29,7 @@ int main() {
     sf::ConvexShape spaceship;
 
     // bullets
-    std::vector<Bullet> bullets;
+    std::vector<sf::RectangleShape> bullets;
 
     // settings
     sf::ContextSettings settings;
@@ -114,8 +100,11 @@ int main() {
 
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
                 if (can_shoot) {
-                    bullets.push_back(Bullet(spaceship.getTransform().transformPoint(spaceship.getPoint(1)),
-                                             spaceship.getRotation()));
+                    sf::RectangleShape rs(sf::Vector2f(10, 10));
+                    rs.setPosition(spaceship.getTransform().transformPoint(spaceship.getPoint(1)));
+                    rs.setRotation(spaceship.getRotation());
+
+                    bullets.push_back(rs);
                     can_shoot = false;
                 }
             }
@@ -143,18 +132,18 @@ int main() {
         window.draw(spaceship);
 
         for(int i = 0; i < bullets.size(); i++) {
-            if(bullets[i].object.getPosition().x > window.getSize().x ||
-               bullets[i].object.getPosition().x < 0 ||
-               bullets[i].object.getPosition().y > window.getSize().y ||
-               bullets[i].object.getPosition().y < 0) {
+            if(bullets[i].getPosition().x > window.getSize().x ||
+               bullets[i].getPosition().x < 0 ||
+               bullets[i].getPosition().y > window.getSize().y ||
+               bullets[i].getPosition().y < 0) {
                 bullets.erase(bullets.begin() + i);
             }
 
-            sf::Vector2f direction(std::cos(PI * bullets[i].object.getRotation() / 180.f),
-                                   std::sin(PI * bullets[i].object.getRotation() / 180.f));
+            sf::Vector2f direction(std::cos(PI * bullets[i].getRotation() / 180.f),
+                                   std::sin(PI * bullets[i].getRotation() / 180.f));
 
-            bullets[i].object.move(direction * BULLET_SPEED);
-            window.draw(bullets[i].object);
+            bullets[i].move(direction * BULLET_SPEED);
+            window.draw(bullets[i]);
         }
 
         window.draw(text_points);
