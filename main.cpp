@@ -3,8 +3,10 @@
 
 #include <iostream>
 #include <cmath>
+#include <string>
 
 #define FRAMERATE 60
+#define BULLET_SPEED 2.0f
 #define PI 3.14159265f
 
 struct Bullet {
@@ -23,6 +25,7 @@ struct Bullet {
 int main() {
     bool focus = true;
 
+    // font and text
     sf::Font font;
     sf::Text text_points;
     sf::Text text_npoints;
@@ -112,11 +115,11 @@ int main() {
             }
         }
 
+        text_npoints.setString(std::to_string(bullets.size()));
+
         window.clear(sf::Color::Black);
 
         // draw here
-        window.draw(text_points);
-        window.draw(text_npoints);
         window.draw(spaceship);
 
         for(int i = 0; i < bullets.size(); i++) {
@@ -127,10 +130,15 @@ int main() {
                 bullets.erase(bullets.begin() + i);
             }
 
-            bullets[i].object.move(std::cos(PI * bullets[i].object.getRotation() / 180.f),
+            sf::Vector2f direction(std::cos(PI * bullets[i].object.getRotation() / 180.f),
                                    std::sin(PI * bullets[i].object.getRotation() / 180.f));
+
+            bullets[i].object.move(direction * BULLET_SPEED);
             window.draw(bullets[i].object);
         }
+
+        window.draw(text_points);
+        window.draw(text_npoints);
 
         window.display();
     }
