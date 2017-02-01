@@ -9,6 +9,7 @@
 #define BULLET_SPEED 2.0f
 #define PI 3.14159265f
 
+// TODO: do i really need it?
 struct Bullet {
     sf::RectangleShape object;
     sf::Vector2f original_pos;
@@ -20,6 +21,13 @@ struct Bullet {
 
         this->original_pos = position;
     }
+};
+
+struct Asteroid {
+    sf::Vector2f position;
+
+    Asteroid(){}
+    ~Asteroid(){}
 };
 
 int main() {
