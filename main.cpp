@@ -9,13 +9,6 @@
 #define BULLET_SPEED 2.0f
 #define PI 3.14159265f
 
-struct Asteroid {
-    sf::Vector2f position;
-
-    Asteroid(){}
-    ~Asteroid(){}
-};
-
 int main() {
     bool focus = true;
     bool can_shoot = true;
@@ -34,7 +27,7 @@ int main() {
 
     // bullets
     std::vector<sf::RectangleShape> bullets;
-    std::vector<Asteroid> asteroids;
+    std::vector<sf::RectangleShape> asteroids;
 
     // settings
     sf::ContextSettings settings;
@@ -105,11 +98,11 @@ int main() {
 
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
                 if (can_shoot) {
-                    sf::RectangleShape rs(sf::Vector2f(10, 10));
-                    rs.setPosition(spaceship.getTransform().transformPoint(spaceship.getPoint(1)));
-                    rs.setRotation(spaceship.getRotation());
+                    sf::RectangleShape bullet(sf::Vector2f(10, 10));
+                    bullet.setPosition(spaceship.getTransform().transformPoint(spaceship.getPoint(1)));
+                    bullet.setRotation(spaceship.getRotation());
 
-                    bullets.push_back(rs);
+                    bullets.push_back(bullet);
                     can_shoot = false;
                 }
             }
@@ -135,7 +128,11 @@ int main() {
         // asteroid timings
         asteroid_time = asteroid_clock.getElapsedTime().asSeconds();
         if (asteroid_time > 2) {
-            printf("[INFO] - Restarting clock!\n");
+            sf::RectangleShape asteroid(sf::Vector2f(10, 10));
+            asteroid.setPosition(0, 0);
+            asteroid.setRotation(spaceship.getRotation());
+
+            asteroids.push_back(asteroid);
             asteroid_clock.restart();
         }
 
@@ -157,6 +154,15 @@ int main() {
 
             bullets[i].move(direction * BULLET_SPEED);
             window.draw(bullets[i]);
+        }
+
+        for(int i = 0; i < asteroids.size(); i++) {
+            sf::Vector2f direction(spaceship.getPosition().x, spaceship.getPosition().y);
+            // sf::Vector2f direction(std::cos(PI * asteroids[i].getRotation() / 180.f),
+            //                        std::sin(PI * asteroids[i].getRotation() / 180.f));
+
+            asteroids[i].move(direction * 0.002f);
+            window.draw(asteroids[i]);
         }
 
         window.draw(text_points);
