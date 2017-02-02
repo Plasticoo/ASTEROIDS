@@ -8,7 +8,7 @@
 
 #define FRAMERATE 60
 #define BULLET_SPEED 2.0f
-#define ASTEROID_SPEED 0.005f
+#define ASTEROID_SPEED 0.5f
 
 #define PI 3.14159265f
 
@@ -16,11 +16,22 @@ sf::Vector2f random_asteroid_position(int win_x, int win_y) {
     int _x = (rand() % win_x) + 1;
     int _y = (rand() % win_y) + 1;
 
-    sf::Vector2f v_array[2] = {sf::Vector2f(_x, 0),
-                               sf::Vector2f(0, _y)};
+    sf::Vector2f v_array[4] = {sf::Vector2f(_x, 0),
+                               sf::Vector2f(0, _y),
+                               sf::Vector2f(_x, win_y),
+                               sf::Vector2f(win_x, _y),
+    };
 
-    return v_array[rand()%2];
+    return v_array[rand()%4];
 }
+
+sf::Vector2f normalize(const sf::Vector2f& v) {
+    float _s = sqrt(v.x * v.x + v.y * v.y);
+    float _x = v.x / _s;
+    float _y = v.y / _s;
+
+    return sf::Vector2f(_x, _y);
+};
 
 int main(int argc, char** argv) {
 
@@ -143,13 +154,13 @@ int main(int argc, char** argv) {
 
         // asteroid timings
         asteroid_time = asteroid_clock.getElapsedTime().asSeconds();
-        if (asteroid_time > 2) {
-            sf::RectangleShape asteroid(sf::Vector2f(10, 10));
-            asteroid.setPosition(0, 0);
-            asteroid.setRotation(spaceship.getRotation());
-
+        if (asteroid_time > 1) {
             sf::Vector2f rand_vector2f = random_asteroid_position(window.getSize().x, window.getSize().y);
             printf("[INFO] - Rand vector: {x:%f\ty:%f}\n", rand_vector2f.x, rand_vector2f.y);
+
+            sf::RectangleShape asteroid(sf::Vector2f(10, 10));
+            asteroid.setPosition(rand_vector2f);
+            //asteroid.setRotation(-spaceship.getRotation());
 
             asteroids.push_back(asteroid);
             asteroid_clock.restart();
@@ -185,7 +196,7 @@ int main(int argc, char** argv) {
                 continue;
             }
 
-            sf::Vector2f direction(spaceship.getPosition().x, spaceship.getPosition().y);
+            sf::Vector2f direction = normalize(spaceship.getPosition() - asteroids[i].getPosition());
 
             asteroids[i].move(direction * ASTEROID_SPEED);
             window.draw(asteroids[i]);
