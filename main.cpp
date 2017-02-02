@@ -3,13 +3,29 @@
 
 #include <iostream>
 #include <cmath>
+#include <cstdlib>
 #include <string>
 
 #define FRAMERATE 60
 #define BULLET_SPEED 2.0f
+#define ASTEROID_SPEED 0.005f
+
 #define PI 3.14159265f
 
-int main() {
+sf::Vector2f random_asteroid_position(int win_x, int win_y) {
+    int _x = (rand() % win_x) + 1;
+    int _y = (rand() % win_y) + 1;
+
+    sf::Vector2f v_array[2] = {sf::Vector2f(_x, 0),
+                               sf::Vector2f(0, _y)};
+
+    return v_array[rand()%2];
+}
+
+int main(int argc, char** argv) {
+
+    srand(time(NULL));
+
     bool focus = true;
     bool can_shoot = true;
 
@@ -132,6 +148,9 @@ int main() {
             asteroid.setPosition(0, 0);
             asteroid.setRotation(spaceship.getRotation());
 
+            sf::Vector2f rand_vector2f = random_asteroid_position(window.getSize().x, window.getSize().y);
+            printf("[INFO] - Rand vector: {x:%f\ty:%f}\n", rand_vector2f.x, rand_vector2f.y);
+
             asteroids.push_back(asteroid);
             asteroid_clock.restart();
         }
@@ -141,12 +160,13 @@ int main() {
         // draw here
         window.draw(spaceship);
 
-        for(int i = 0; i < bullets.size(); i++) {
+        for(int i = 0; (unsigned)i < bullets.size(); i++) {
             if(bullets[i].getPosition().x > window.getSize().x ||
                bullets[i].getPosition().x < 0 ||
                bullets[i].getPosition().y > window.getSize().y ||
                bullets[i].getPosition().y < 0) {
                 bullets.erase(bullets.begin() + i);
+                continue;
             }
 
             sf::Vector2f direction(std::cos(PI * bullets[i].getRotation() / 180.f),
@@ -156,12 +176,18 @@ int main() {
             window.draw(bullets[i]);
         }
 
-        for(int i = 0; i < asteroids.size(); i++) {
-            sf::Vector2f direction(spaceship.getPosition().x, spaceship.getPosition().y);
-            // sf::Vector2f direction(std::cos(PI * asteroids[i].getRotation() / 180.f),
-            //                        std::sin(PI * asteroids[i].getRotation() / 180.f));
+        for(int i = 0; (unsigned)i < asteroids.size(); i++) {
+            if(asteroids[i].getPosition().x > window.getSize().x ||
+               asteroids[i].getPosition().x < 0 ||
+               asteroids[i].getPosition().y > window.getSize().y ||
+               asteroids[i].getPosition().y < 0) {
+                asteroids.erase(asteroids.begin() + i);
+                continue;
+            }
 
-            asteroids[i].move(direction * 0.002f);
+            sf::Vector2f direction(spaceship.getPosition().x, spaceship.getPosition().y);
+
+            asteroids[i].move(direction * ASTEROID_SPEED);
             window.draw(asteroids[i]);
         }
 
