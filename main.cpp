@@ -72,7 +72,9 @@ int main(int argc, char** argv) {
     spaceship.setPoint(2, sf::Vector2f(20, 80));
 
     spaceship.setOrigin((20 + 70 + 20) / 3, (40 + 60 + 80) / 3);
-    spaceship.setFillColor(sf::Color::Cyan);
+    spaceship.setFillColor(sf::Color::Black);
+    spaceship.setOutlineThickness(1.0f);
+    spaceship.setOutlineColor(sf::Color::White);
     spaceship.setPosition(800/2, 600/2);
 
     if (!font.loadFromFile("resources/arial.ttf")) {
