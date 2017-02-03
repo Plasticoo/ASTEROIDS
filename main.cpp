@@ -9,6 +9,7 @@
 #define FRAMERATE 60
 #define BULLET_SPEED 2.0f
 #define ASTEROID_SPEED 1.0f
+#define ROTATION_SPEED 1.5f
 
 #define PI 3.14159265f
 
@@ -169,11 +170,11 @@ int main(int argc, char** argv) {
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                spaceship.setRotation(spaceship.getRotation() - 1.0f);
+                spaceship.setRotation(spaceship.getRotation() - ROTATION_SPEED);
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                spaceship.setRotation(spaceship.getRotation() + 1.0f);
+                spaceship.setRotation(spaceship.getRotation() + ROTATION_SPEED);
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
