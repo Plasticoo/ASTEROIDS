@@ -39,6 +39,7 @@ int main(int argc, char** argv) {
 
     bool focus = true;
     bool can_shoot = true;
+    bool game_over = false;
 
     // font and text
     sf::Font font;
@@ -95,6 +96,30 @@ int main(int argc, char** argv) {
                              text_points.getPosition().y);
 
     while (window.isOpen()) {
+
+        if(game_over) {
+
+            sf::Text text_exit;
+
+            text_exit.setFont(font);
+            text_exit.setString("GAME OVER!");
+            text_exit.setCharacterSize(64);
+            text_exit.setStyle(sf::Text::Regular);
+            text_exit.setOrigin(text_exit.getLocalBounds().left + text_exit.getLocalBounds().width/2.0f,
+                                text_exit.getLocalBounds().top  + text_exit.getLocalBounds().height/2.0f);
+            text_exit.setPosition(window.getSize().x / 2, window.getSize().y / 2);
+
+            // TODO: Only execute if window with focus
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+                printf("[INFO] - Closing window!\n");
+                window.close();
+            }
+
+            window.draw(text_exit);
+            window.display();
+
+            continue;
+        }
 
         sf::Event event;
 
@@ -197,6 +222,11 @@ int main(int argc, char** argv) {
                asteroids[i].getPosition().y < 0) {
                 asteroids.erase(asteroids.begin() + i);
                 continue;
+            }
+
+            // TODO: check collision with spaceship
+            if (asteroids[i].getGlobalBounds().intersects(spaceship.getGlobalBounds())) {
+                game_over = true;
             }
 
             sf::Vector2f direction = normalize(spaceship.getPosition() - asteroids[i].getPosition());
