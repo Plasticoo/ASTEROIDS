@@ -41,6 +41,8 @@ int main(int argc, char** argv) {
     bool can_shoot = true;
     bool game_over = false;
 
+    int points = 0;
+
     // font and text
     sf::Font font;
     sf::Text text_points;
@@ -182,7 +184,7 @@ int main(int argc, char** argv) {
         }
 
         // set text
-        text_npoints.setString(std::to_string(bullets.size()));
+        text_npoints.setString(std::to_string(points));
 
         // asteroid timings
         asteroid_time = asteroid_clock.getElapsedTime().asSeconds();
@@ -232,6 +234,8 @@ int main(int argc, char** argv) {
                 if (bullets[j].getGlobalBounds().intersects(asteroids[i].getGlobalBounds())) {
                     asteroids.erase(asteroids.begin() + i);
                     bullets.erase(bullets.begin() + j);
+
+                    points++;
                 }
             }
 
