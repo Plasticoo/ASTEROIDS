@@ -159,7 +159,9 @@ int main(int argc, char** argv) {
         asteroid_time = asteroid_clock.getElapsedTime().asSeconds();
         if (asteroid_time > 1) {
             sf::Vector2f rand_vector2f = random_asteroid_position(window.getSize().x, window.getSize().y);
+
             sf::RectangleShape asteroid(sf::Vector2f(10, 10));
+            asteroid.setOrigin(5, 5);
             asteroid.setPosition(rand_vector2f);
 
             asteroids.push_back(asteroid);
