@@ -155,6 +155,9 @@ int main(int argc, char** argv) {
                 if (can_shoot) {
                     sf::RectangleShape bullet(sf::Vector2f(10, 10));
                     bullet.setOrigin(5,5);
+                    bullet.setFillColor(sf::Color::Black);
+                    bullet.setOutlineThickness(1.0f);
+                    bullet.setOutlineColor(sf::Color::Cyan);
                     bullet.setPosition(spaceship.getTransform().transformPoint(spaceship.getPoint(1)));
                     bullet.setRotation(spaceship.getRotation());
 
@@ -225,7 +228,13 @@ int main(int argc, char** argv) {
                 continue;
             }
 
-            // TODO: check collision with spaceship
+            for (int j = 0; (unsigned)j < bullets.size(); j++) {
+                if (bullets[j].getGlobalBounds().intersects(asteroids[i].getGlobalBounds())) {
+                    asteroids.erase(asteroids.begin() + i);
+                    bullets.erase(bullets.begin() + j);
+                }
+            }
+
             if (asteroids[i].getGlobalBounds().intersects(spaceship.getGlobalBounds())) {
                 game_over = true;
             }
