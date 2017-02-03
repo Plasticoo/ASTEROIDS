@@ -8,7 +8,7 @@
 
 #define FRAMERATE 60
 #define BULLET_SPEED 2.0f
-#define ASTEROID_SPEED 0.5f
+#define ASTEROID_SPEED 1.0f
 
 #define PI 3.14159265f
 
@@ -126,6 +126,7 @@ int main(int argc, char** argv) {
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
                 if (can_shoot) {
                     sf::RectangleShape bullet(sf::Vector2f(10, 10));
+                    bullet.setOrigin(5,5);
                     bullet.setPosition(spaceship.getTransform().transformPoint(spaceship.getPoint(1)));
                     bullet.setRotation(spaceship.getRotation());
 
@@ -156,13 +157,11 @@ int main(int argc, char** argv) {
         asteroid_time = asteroid_clock.getElapsedTime().asSeconds();
         if (asteroid_time > 1) {
             sf::Vector2f rand_vector2f = random_asteroid_position(window.getSize().x, window.getSize().y);
-            printf("[INFO] - Rand vector: {x:%f\ty:%f}\n", rand_vector2f.x, rand_vector2f.y);
-
             sf::RectangleShape asteroid(sf::Vector2f(10, 10));
             asteroid.setPosition(rand_vector2f);
-            //asteroid.setRotation(-spaceship.getRotation());
 
             asteroids.push_back(asteroid);
+
             asteroid_clock.restart();
         }
 
